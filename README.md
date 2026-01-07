@@ -83,13 +83,5 @@ This project was created with passion by **Faizal Richi Candra** as part of the 
 
 *Feel free to star ⭐ this repository if you find it helpful!*
 
-```
-
-## 📜 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 
-Please attribute the original work to **Faizal Richi Candra**.
-
----
-
 
 🚀 **Link Demo Live:** [Klik di Sini](https://mrichie97.github.io/CodingCamp-5Jan26-faizalrichicandra/)
