@@ -91,4 +91,5 @@ Please attribute the original work to **Faizal Richi Candra**.
 
 ---
 
-[🚀 Lihat Demo Live](https://mrichie97.github.io/CodingCamp-5Jan26-faizalrichicandra/)
+
+🚀 **Link Demo Live:** [Klik di Sini](https://mrichie97.github.io/CodingCamp-5Jan26-faizalrichicandra/)
