@@ -95,6 +95,25 @@ document.addEventListener('DOMContentLoaded', () => {
             const isExpanded = expandedTasks.has(task.id);
             const subtaskCount = task.subtasks ? task.subtasks.length : 0;
             const hasSubtasks = subtaskCount > 0;
+            
+            // Logika cek subtask untuk tombol utama
+            const hasUnfinishedSubtasks = task.subtasks && task.subtasks.some(sub => !sub.completed);
+
+            let actionBtnClass, actionBtnIcon, actionBtnTitle;
+
+            if (task.completed) {
+                actionBtnClass = 'btn-undo';
+                actionBtnIcon = 'fa-rotate-left';
+                actionBtnTitle = 'Undo';
+            } else if (hasUnfinishedSubtasks) {
+                actionBtnClass = 'btn-blocked';
+                actionBtnIcon = 'fa-xmark';
+                actionBtnTitle = 'Complete all subtasks first';
+            } else {
+                actionBtnClass = 'btn-check';
+                actionBtnIcon = 'fa-check';
+                actionBtnTitle = 'Complete';
+            }
 
             let subtasksHtml = '';
             if (hasSubtasks) {
@@ -152,9 +171,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="action-btn btn-edit" title="Edit Task" onclick="openEditModal(${task.id})">
                             <i class="fa-solid fa-pen"></i>
                         </button>
-                        <button class="action-btn ${task.completed ? 'btn-undo' : 'btn-check'}" title="${task.completed ? 'Undo' : 'Complete'}" onclick="toggleTask(${task.id})">
-                            <i class="fa-solid ${task.completed ? 'fa-rotate-left' : 'fa-check'}"></i>
+                        
+                        <button class="action-btn ${actionBtnClass}" title="${actionBtnTitle}" onclick="toggleTask(${task.id})">
+                            <i class="fa-solid ${actionBtnIcon}"></i>
                         </button>
+
                         <button class="action-btn btn-delete" title="Delete" onclick="deleteTask(${task.id})">
                             <i class="fa-solid fa-trash"></i>
                         </button>
@@ -174,7 +195,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const addTask = () => {
         const text = taskInput.value.trim();
         const date = dateInput.value;
-        if (text === '') return;
+
+        // Validasi 1: Cek apakah input teks kosong
+        if (text === '') {
+            alert("Please enter a task description");
+            return;
+        }
+
+        // Validasi 2: Cek apakah input tanggal kosong (PERMINTAAN ANDA)
+        if (date === '') {
+            alert("Please select a due date first");
+            return;
+        }
+
         tasks.push({ id: Date.now(), text, date, completed: false, subtasks: [] });
         saveTasks();
         taskInput.value = '';
@@ -183,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.toggleTask = (id) => {
         const task = tasks.find(t => t.id === id);
-        // LOGIKA BARU: Cek subtask sebelum menyelesaikan
+        
         if (!task.completed) {
             const hasUnfinished = task.subtasks && task.subtasks.some(sub => !sub.completed);
             if (hasUnfinished) {
@@ -201,7 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const parentTask = tasks.find(t => t.id === parentId);
         
-        // LOGIKA BARU: Cek duplikasi teks
         const isDuplicate = parentTask.subtasks.some(sub => 
             sub.text.trim().toLowerCase() === subText.trim().toLowerCase()
         );
@@ -214,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
         parentTask.subtasks.push({
             id: Date.now(),
             text: subText,
-            date: parentTask.date, // Mengikuti tanggal induk
+            date: parentTask.date,
             completed: false
         });
         expandedTasks.add(parentId);
